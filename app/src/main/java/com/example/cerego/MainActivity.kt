@@ -2,6 +2,7 @@ package com.example.cerego
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -14,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var adapter: Adapter
+    lateinit var myAdapter: Adapter
 
     lateinit var viewModel: MainActivityViewModel
 
@@ -23,14 +24,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel =  ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-
-        viewModel.fetchData()
+        myAdapter  = Adapter()
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter
+            adapter = myAdapter
 
         }
 
+        viewModel.getData().observe(this, Observer {
 
+
+            myAdapter.setCampaignList(it)
+        })
     }
 }
